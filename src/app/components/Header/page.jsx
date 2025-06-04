@@ -6,7 +6,7 @@ import React from "react";
 const Header = () => {
   const { data: session, status } = useSession();
   const handleSignOut = () => {
-    localStorage.clear();
+    // localStorage.clear();
     signOut({ callbackUrl: "/login" });
   };
   return (

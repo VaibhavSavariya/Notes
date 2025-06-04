@@ -11,6 +11,7 @@ const Signup = () => {
   });
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
 
   const validate = () => {
@@ -40,14 +41,15 @@ const Signup = () => {
     e.preventDefault();
     setError("");
     setSuccess("");
+    setLoading(true);
     const validationError = validate();
     if (validationError) {
       setError(validationError);
+      setLoading(false);
       return;
     }
     try {
       const res = await RegisterUser(userData);
-      console.log(" res:", res);
       if (res.success) {
         setSuccess("Signup successful! Redirecting to login...");
         setTimeout(() => router.push("/login"), 1500);
@@ -57,6 +59,7 @@ const Signup = () => {
     } catch (error) {
       setError("Error during signup. Please try again.");
     }
+    setLoading(false);
   };
 
   return (
@@ -122,9 +125,12 @@ const Signup = () => {
           </div>
           <button
             type="submit"
-            className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-600 transition duration-200 w-full"
+            disabled={loading}
+            className={`bg-blue-500 text-white py-2 px-4 rounded w-full transition duration-200
+    ${loading ? "bg-blue-300 cursor-not-allowed" : "hover:bg-blue-600"}
+  `}
           >
-            Signup
+            {loading ? "Signing Up..." : "Signup"}
           </button>
         </form>
       </div>

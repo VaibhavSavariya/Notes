@@ -7,23 +7,30 @@ export const authConfig = {
     // error: "/error", // Error page URL
   },
   callbacks: {
-    authorized({ auth, request: { nextUrl } }) {
-      const isLoggedIn = !!auth?.user;
-      const inRoute = nextUrl.pathname;
-
-      if (isLoggedIn) {
-        if (inRoute === "/signup" || inRoute === "/login") {
-          return NextResponse.redirect(new URL("/dashboard", nextUrl));
-        }
-        return true;
-      } else {
-        if (inRoute === "/login" || inRoute === "/signup") return true;
-        return false;
+    async jwt({ token, user }) {
+      if (user) {
+        // Convert _id to string if it exists
+        token._id = user._id?.toString ? user._id.toString() : user._id;
+        token.email = user.email;
       }
+      return token;
+    },
+    async session({ session, token }) {
+      if (token) {
+        // Convert _id to string if it exists
+        session.user._id = token._id?.toString
+          ? token._id.toString()
+          : token._id;
+        session.user.email = token.email;
+      }
+      return session;
     },
   },
   providers: [
     // ...your providers
   ],
+  session: {
+    strategy: "jwt",
+  },
   secret: process.env.NEXT_PUBLIC_AUTH_SECRET,
 };

@@ -1,8 +1,10 @@
 "use client";
+import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import React, { useState } from "react";
 
 const CreateNote = () => {
+  const { data: session, status } = useSession();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [error, setError] = useState("");
@@ -36,6 +38,7 @@ const CreateNote = () => {
       return;
     }
     const note = {
+      userId: session?.user?._id || "guest",
       id: Date.now(),
       title: title.trim(),
       content: description.trim(),

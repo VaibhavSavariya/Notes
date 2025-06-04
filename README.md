@@ -10,7 +10,6 @@ A full-stack Notes application built with **Next.js App Router**, **NextAuth.js*
 - Protected routes using middleware
 - Create, edit, and delete notes
 - Notes pagination (4 per page)
-- Responsive UI with Tailwind CSS
 - LocalStorage for note persistence (demo)
 - Server-side and client-side validation
 - Clean, modern UI
@@ -123,7 +122,6 @@ Visit [http://localhost:3000](http://localhost:3000) in your browser.
 ## UI
 
 - Built with **Tailwind CSS**.
-- Responsive and accessible.
 - Header and Footer components included.
 
 ---
@@ -132,12 +130,6 @@ Visit [http://localhost:3000](http://localhost:3000) in your browser.
 
 - To use a real database for notes, replace localStorage logic in note pages with API/database calls.
 - Update the MongoDB URI and NextAuth secret in your `.env.local`.
-
----
-
-## License
-
-MIT
 
 ---
 

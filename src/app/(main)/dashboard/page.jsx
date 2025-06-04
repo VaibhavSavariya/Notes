@@ -2,22 +2,31 @@
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { FiPlus, FiEdit2, FiTrash2 } from "react-icons/fi";
+import { useSession } from "next-auth/react";
 
 const NOTES_PER_PAGE = 4;
 
 const Dashboard = () => {
   const [notes, setNotes] = useState([]);
   const [page, setPage] = useState(1);
-
+  const { data: session, status } = useSession();
   useEffect(() => {
     const storedNotes = JSON.parse(localStorage.getItem("notes") || "[]");
-    setNotes(storedNotes);
-  }, []);
+    if (session?.user?._id) {
+      setNotes(storedNotes.filter((note) => note.userId === session.user._id));
+    } else {
+      setNotes([]);
+    }
+  }, [session]);
 
   const handleDelete = (id) => {
     const updatedNotes = notes.filter((note) => note.id !== id);
     setNotes(updatedNotes);
-    localStorage.setItem("notes", JSON.stringify(updatedNotes));
+
+    const allNotes = JSON.parse(localStorage.getItem("notes") || "[]");
+    const filteredAllNotes = allNotes.filter((note) => note.id !== id);
+    localStorage.setItem("notes", JSON.stringify(filteredAllNotes));
+
     if ((page - 1) * NOTES_PER_PAGE >= updatedNotes.length && page > 1) {
       setPage(page - 1);
     }
